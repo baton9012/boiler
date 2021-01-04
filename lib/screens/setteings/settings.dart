@@ -65,7 +65,7 @@ class _SettingsState extends State<Settings> {
   }
 
   String sortTitle() {
-    switch (config.sort_type_id) {
+    switch (config.sortTypeId) {
       case 0:
         return 'Дота добавления';
       case 1:

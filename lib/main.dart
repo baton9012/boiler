@@ -1,6 +1,4 @@
-import 'package:boiler/models/config.dart';
 import 'package:boiler/screens/tast_list/task_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'db/db.dart';

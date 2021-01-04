@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InheritedTaskList extends InheritedWidget {
-  Function updateTaskList;
+  final Function updateTaskList;
 
   InheritedTaskList({@required this.updateTaskList, @required Widget child})
       : super(child: child);

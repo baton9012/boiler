@@ -3,7 +3,7 @@ class TaskTitle {
   String nlp;
   String type;
   String city;
-  String date_create;
+  String dateCreate;
   int status;
 
   TaskTitle({
@@ -11,7 +11,7 @@ class TaskTitle {
     this.nlp,
     this.type,
     this.city,
-    this.date_create,
+    this.dateCreate,
     this.status,
   });
 
@@ -20,7 +20,7 @@ class TaskTitle {
         nlp: taskTitleJson['nlp'],
         type: taskTitleJson['type'],
         city: taskTitleJson['city'],
-        date_create: taskTitleJson['date_create'],
+        dateCreate: taskTitleJson['date_create'],
         status: taskTitleJson['status'],
       );
 
@@ -29,7 +29,7 @@ class TaskTitle {
         'nlp': nlp,
         'type': type,
         'city': city,
-        'date_create': date_create,
+        'date_create': dateCreate,
         'status': status,
       };
 }

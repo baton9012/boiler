@@ -41,7 +41,7 @@ class ListItem extends StatelessWidget {
               SizedBox(width: 64),
               Text(
                 dateFormat(
-                  date: taskTitle.date_create,
+                  date: taskTitle.dateCreate,
                 ),
               ),
             ],

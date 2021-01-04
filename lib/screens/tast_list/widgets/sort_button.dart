@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import '../../../global.dart';
 
 class SortButton extends StatefulWidget {
-  var parent;
+  Function callBack;
 
-  SortButton({this.parent});
+  SortButton({this.callBack});
 
   @override
   _SortButtonState createState() => _SortButtonState();
@@ -24,7 +24,7 @@ class _SortButtonState extends State<SortButton> {
 
   @override
   Widget build(BuildContext context) {
-    int selected = config.sort_type_id == null ? 0 : config.sort_type_id;
+    int selected = config.sortTypeId == null ? 0 : config.sortTypeId;
     ValueNotifier<SortItems> _selectedItem =
         new ValueNotifier<SortItems>(sortItems[selected]);
     return PopupMenuButton<SortItems>(
@@ -46,10 +46,10 @@ class _SortButtonState extends State<SortButton> {
                             value: sortItems[index],
                             groupValue: _selectedItem.value,
                             onChanged: (item) {
+                              _selectedItem.value = sortItems[index];
+                              config.sortTypeId = index;
                               setState(() {
-                                _selectedItem.value = sortItems[index];
-                                config.sort_type_id = index;
-                                widget.parent.s22ort(sort_type: index);
+                                widget.callBack(sortType: index);
                               });
                             }),
                       ],

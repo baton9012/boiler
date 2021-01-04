@@ -46,8 +46,8 @@ class DBProvider {
     final db = await database;
     var res = await db.rawQuery('SELECT sort_type_id, lang_id '
         'FROM config ');
-    config.sort_type_id =
-        res.map((c) => Config.fromMap(c)).toList().first.sort_type_id;
+    config.sortTypeId =
+        res.map((c) => Config.fromMap(c)).toList().first.sortTypeId;
   }
 
   Future<List<TaskTitle>> getAllTaskTitle(
@@ -111,7 +111,7 @@ class DBProvider {
         'SET status = $status '
         'WHERE id = $id; '
         'UPDATE order_detail '
-        'SET ${updateDate(date, status)} '
+        'SET ${updateDate(date: date, status: status)} '
         'WHERE id_order = $id');
     return res;
   }
@@ -139,16 +139,17 @@ class DBProvider {
     return res;
   }
 
-  String updateDate(DateTime date, int status) {
+  String updateDate({@required DateTime date, int status = 1}) {
     if (status == 1) {
       return 'date_in_work = \'$date\'';
     } else if (status == 2) {
       return 'date_done = \'$date\'';
     }
+    return '';
   }
 
   String orderByTaskTitle() {
-    switch (config.sort_type_id) {
+    switch (config.sortTypeId) {
       case 0:
         return 'date_create';
       case 1:
@@ -159,6 +160,8 @@ class DBProvider {
         return 'status';
       case 4:
         return 'city_search';
+      default:
+        return 'date_create';
     }
   }
 
@@ -168,6 +171,8 @@ class DBProvider {
         return 'nlp_search like \'%$searchText%\' ';
       case 1:
         return 'city_search like \'%$searchText%\' ';
+      default:
+        return 'nlp_search like \'%$searchText%\' ';
     }
   }
 }

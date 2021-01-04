@@ -1,16 +1,16 @@
 class Config {
-  int sort_type_id;
-  int language_id;
+  int sortTypeId;
+  int languageId;
 
-  Config({this.sort_type_id, this.language_id});
+  Config({this.sortTypeId, this.languageId});
 
   factory Config.fromMap(Map<String, dynamic> configJson) => Config(
-        sort_type_id: configJson['sort_type_id'],
-        language_id: configJson['lang_id'],
+        sortTypeId: configJson['sort_type_id'],
+        languageId: configJson['lang_id'],
       );
 
   Map<String, dynamic> toMap() => {
-        'sort_type_id': sort_type_id,
-        'lang_id': language_id,
+        'sort_type_id': sortTypeId,
+        'lang_id': languageId,
       };
 }

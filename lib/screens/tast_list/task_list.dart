@@ -62,7 +62,7 @@ class _TaskListState extends State<TaskList> {
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: SortButton(
-                parent: this,
+                callBack: sort,
               ),
             ),
             Padding(
@@ -176,13 +176,13 @@ class _TaskListState extends State<TaskList> {
     });
   }
 
-  void sort({int sort_type, int language}) {
-    config.sort_type_id = sort_type;
+  void sort({int sortType}) {
+    config.sortTypeId = sortType;
     fTaskTitle = DBProvider.db.getAllTaskTitle(searchText: '');
     setState(() {});
   }
 
-  void getConfig() async {
+  Future<void> getConfig() async {
     await DBProvider.db.getConfig();
   }
 

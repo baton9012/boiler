@@ -11,7 +11,7 @@ class SortDialog extends StatefulWidget {
 class _SortDialogState extends State<SortDialog> {
   List<SortItems> sortItems = List<SortItems>();
   SortItems sortItem = SortItems();
-  int sortType = config.sort_type_id;
+  int sortType = config.sortTypeId;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _SortDialogState extends State<SortDialog> {
               onPressed: () {
                 setState(() {
                   sortType = 0;
-                  config.sort_type_id = 0;
+                  config.sortTypeId = 0;
                 });
               }),
           FlatButton(
@@ -55,7 +55,7 @@ class _SortDialogState extends State<SortDialog> {
               onPressed: () {
                 setState(() {
                   sortType = 1;
-                  config.sort_type_id = 1;
+                  config.sortTypeId = 1;
                 });
               }),
           FlatButton(
@@ -71,7 +71,7 @@ class _SortDialogState extends State<SortDialog> {
               onPressed: () {
                 setState(() {
                   sortType = 2;
-                  config.sort_type_id = 2;
+                  config.sortTypeId = 2;
                 });
               }),
           FlatButton(
@@ -87,7 +87,7 @@ class _SortDialogState extends State<SortDialog> {
               onPressed: () {
                 setState(() {
                   sortType = 3;
-                  config.sort_type_id = 3;
+                  config.sortTypeId = 3;
                 });
               }),
           FlatButton(
@@ -103,7 +103,7 @@ class _SortDialogState extends State<SortDialog> {
               onPressed: () {
                 setState(() {
                   sortType = 4;
-                  config.sort_type_id = 4;
+                  config.sortTypeId = 4;
                 });
               }),
         ],

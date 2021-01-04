@@ -72,7 +72,7 @@ class _TaskDetailState extends State<TaskDetail> {
                                 TextDetail(
                                   title: '',
                                   data: dateFormat(
-                                    date: widget.taskTitle.date_create,
+                                    date: widget.taskTitle.dateCreate,
                                   ),
                                 ),
                               ],
@@ -95,7 +95,7 @@ class _TaskDetailState extends State<TaskDetail> {
                             ),
                             TextDetail(
                               title: '',
-                              data: task.description_customer,
+                              data: task.descriptionCustomer,
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +135,7 @@ class _TaskDetailState extends State<TaskDetail> {
                             SizedBox(height: 8.0),
                             TextDetail(
                               title: 'Тип бойлера: ',
-                              data: task.boiler_type,
+                              data: task.boilerType,
                             ),
                             TextField(
                               controller: textEditingController,
@@ -170,12 +170,12 @@ class _TaskDetailState extends State<TaskDetail> {
 
   List<Widget> fillProgressBar(int status) {
     List<Widget> dates = List<Widget>();
-    dates.add(Text(dateFormat(date: task.date_attached)));
+    dates.add(Text(dateFormat(date: task.dateAttached)));
     if (status == 1) {
-      dates.add(Text(dateFormat(date: task.date_in_work)));
+      dates.add(Text(dateFormat(date: task.dateInWork)));
     } else if (status == 2) {
-      dates.add(Text(dateFormat(date: task.date_in_work)));
-      dates.add(Text(dateFormat(date: task.date_done)));
+      dates.add(Text(dateFormat(date: task.dateInWork)));
+      dates.add(Text(dateFormat(date: task.dateDone)));
     }
     return dates;
   }
