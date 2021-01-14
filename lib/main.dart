@@ -1,10 +1,11 @@
-import 'package:boiler/screens/tast_list/task_list.dart';
+import 'package:boiler/services/auth.dart';
+import 'package:boiler/services/db.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'db/db.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await DBProvider.db.initDB();
   runApp(MyApp());
 }
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SafeArea(child: TaskList()),
+      home: Auth().handleAuth(),
     );
   }
 }

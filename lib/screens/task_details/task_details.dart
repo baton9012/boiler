@@ -1,8 +1,8 @@
-import 'package:boiler/db/db.dart';
 import 'package:boiler/models/task.dart';
 import 'package:boiler/models/task_title.dart';
 import 'package:boiler/screens/task_details/widgets/progress_bar.dart';
 import 'package:boiler/screens/task_details/widgets/text_detail.dart';
+import 'package:boiler/services/db.dart';
 import 'package:flutter/material.dart';
 
 import '../../global.dart';
