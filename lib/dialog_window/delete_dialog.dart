@@ -1,4 +1,4 @@
-import 'package:boiler/services/db.dart';
+import 'package:boiler/services/db_sqlite.dart';
 import 'package:flutter/material.dart';
 
 class DeleteDialog extends StatefulWidget {

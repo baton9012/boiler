@@ -2,27 +2,42 @@ import 'package:boiler/screens/tast_list/task_list.dart';
 import 'package:boiler/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
   TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _phoneNumber = '';
+  String _password = '';
   bool _isObscureText = true;
   String _verificationId;
   RegExp _phoneNumberRegExp = RegExp('^(?:[+0]9)?[0-9]{10}\$');
   Icon _passwordSuffixIcon = Icon(Icons.remove_red_eye_rounded);
+  String appSignature = "LhCVFTY9uq2";
 
   @override
   void initState() {
     super.initState();
+    listenForCode();
+    SmsAutoFill().getAppSignature.then((signature) {
+      setState(() {
+        appSignature = signature;
+      });
+    });
     _phoneNumberController.text = '+380';
     _phoneNumber = '';
+  }
+
+  @override
+  void dispose() {
+    SmsAutoFill().unregisterListener();
+    cancel();
+    super.dispose();
   }
 
   @override
@@ -66,16 +81,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 16.0),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
+                  TextFieldPinAutoFill(
+                    currentCode: _password,
                     obscureText: _isObscureText,
-                    controller: _passwordController,
-                    validator: (password) {
-                      if (password.length < 6) {
-                        return 'Введите пароль из смс';
-                      }
-                      return null;
-                    },
+                    codeLength: 6,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                         icon: _passwordSuffixIcon,
@@ -142,10 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) {
-            print('navigate');
-            return TaskList();
-          },
+          builder: (context) => TaskList(),
         ),
       );
     }
@@ -154,8 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> isInBase() async {
     final PhoneVerificationCompleted phoneVerificationCompleted =
         (AuthCredential authCredential) {
-      if (_passwordController.text.length == 6) {
-        print('signin');
+      if (_password.length == 6) {
         Auth().signIn(authCredential);
       }
     };
@@ -183,5 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
       codeSent: smsSent,
       codeAutoRetrievalTimeout: phoneCodeAutoRetrievalTimeout,
     );
+  }
+
+  @override
+  void codeUpdated() {
+    setState(() {
+      _password = code;
+    });
   }
 }

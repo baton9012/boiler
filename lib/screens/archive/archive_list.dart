@@ -2,7 +2,7 @@ import 'package:boiler/dialog_window/delete_dialog.dart';
 import 'package:boiler/models/task_title.dart';
 import 'package:boiler/screens/task_details/task_details.dart';
 import 'package:boiler/screens/tast_list/widgets/list_item.dart';
-import 'package:boiler/services/db.dart';
+import 'package:boiler/services/db_sqlite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
