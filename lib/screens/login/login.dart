@@ -10,7 +10,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
-  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController(
+    text: '+380',
+  );
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _phoneNumber = '';
   String _password = '';
@@ -29,8 +31,6 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
         appSignature = signature;
       });
     });
-    _phoneNumberController.text = '+380';
-    _phoneNumber = '';
   }
 
   @override

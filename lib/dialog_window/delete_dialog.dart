@@ -60,11 +60,11 @@ class _DeleteDialogState extends State<DeleteDialog> {
 
   void onPress() {
     if (widget.type == 0) {
-      DBProvider.db.deleteTask(widget.id);
+      SQLiteDBProvider.db.deleteTask(widget.id);
     } else if (widget.type == 1) {
-      DBProvider.db.archiveTask(widget.id);
+      SQLiteDBProvider.db.archiveTask(widget.id);
     } else {
-      DBProvider.db.unarchive(widget.id);
+      SQLiteDBProvider.db.unarchive(widget.id);
     }
   }
 }

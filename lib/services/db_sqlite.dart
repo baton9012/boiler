@@ -11,10 +11,10 @@ import 'package:sqflite/sqflite.dart';
 
 import '../global.dart';
 
-class DBProvider {
-  DBProvider._();
+class SQLiteDBProvider {
+  SQLiteDBProvider._();
 
-  static final DBProvider db = DBProvider._();
+  static final SQLiteDBProvider db = SQLiteDBProvider._();
 
   Database _database;
 

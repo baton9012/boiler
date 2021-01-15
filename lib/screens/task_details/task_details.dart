@@ -40,7 +40,7 @@ class _TaskDetailState extends State<TaskDetail> {
             height: height - appBar.preferredSize.height,
             padding: const EdgeInsets.all(12.0),
             child: FutureBuilder<Task>(
-                future: DBProvider.db.getTaskDetail(widget.taskTitle.id),
+                future: SQLiteDBProvider.db.getTaskDetail(widget.taskTitle.id),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -181,7 +181,7 @@ class _TaskDetailState extends State<TaskDetail> {
   }
 
   void updateStatusDB() async {
-    await DBProvider.db.updateStatus(
+    await SQLiteDBProvider.db.updateStatus(
       status: widget.taskTitle.status,
       date: DateTime.now(),
       id: widget.taskTitle.id,

@@ -32,7 +32,7 @@ class _TaskListState extends State<TaskList> {
   @override
   void initState() {
     super.initState();
-    fTaskTitle = DBProvider.db.getAllTaskTitle(searchText: '');
+    fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(searchText: '');
     getConfig();
     appBarTitle = GestureDetector(
       child: Text('Список задач'),
@@ -182,18 +182,18 @@ class _TaskListState extends State<TaskList> {
 
   void updateTaskList() {
     setState(() {
-      fTaskTitle = DBProvider.db.getAllTaskTitle(searchText: '');
+      fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(searchText: '');
     });
   }
 
   void sort({int sortType}) {
     config.sortTypeId = sortType;
-    fTaskTitle = DBProvider.db.getAllTaskTitle(searchText: '');
+    fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(searchText: '');
     setState(() {});
   }
 
   Future<void> getConfig() async {
-    await DBProvider.db.getConfig();
+    await SQLiteDBProvider.db.getConfig();
   }
 
   void setSearch() {
@@ -201,7 +201,7 @@ class _TaskListState extends State<TaskList> {
       setState(() {
         isSearch = false;
         textEditingController.text = '';
-        fTaskTitle = DBProvider.db.getAllTaskTitle(searchText: '');
+        fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(searchText: '');
         appBarTitle = GestureDetector(
           child: Text('Список задач'),
           onLongPress: () {
@@ -227,7 +227,7 @@ class _TaskListState extends State<TaskList> {
             hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
           ),
           onChanged: (value) {
-            fTaskTitle = DBProvider.db.getAllTaskTitle(
+            fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(
                 searchText: value.toUpperCase(),
                 serchType: isSearchByNLP
                     ? SearchSetting.SearchBYNLP

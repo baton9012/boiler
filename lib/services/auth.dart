@@ -1,3 +1,4 @@
+import 'package:boiler/global.dart';
 import 'package:boiler/screens/login/login.dart';
 import 'package:boiler/screens/tast_list/task_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,9 +8,9 @@ class Auth {
   final FirebaseAuth _firebaseAuthInstance = FirebaseAuth.instance;
 
   handleAuth() {
-    print('${_firebaseAuthInstance.onAuthStateChanged}');
+    print('${_firebaseAuthInstance.authStateChanges()}');
     return StreamBuilder(
-      stream: _firebaseAuthInstance.onAuthStateChanged,
+      stream: _firebaseAuthInstance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return TaskList();
@@ -28,6 +29,6 @@ class Auth {
     print('signin ${authCredential.toString()}');
     UserCredential userCredential =
         await _firebaseAuthInstance.signInWithCredential(authCredential);
-    userCredential.user.uid;
+    userUid = userCredential.user.uid;
   }
 }

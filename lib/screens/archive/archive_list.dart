@@ -18,7 +18,7 @@ class _ArchiveListState extends State<ArchiveList> {
   @override
   void initState() {
     super.initState();
-    fTaskTitle = DBProvider.db.getAllArchiveTaskTitle();
+    fTaskTitle = SQLiteDBProvider.db.getAllArchiveTaskTitle();
   }
 
   @override

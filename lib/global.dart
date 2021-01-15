@@ -19,3 +19,5 @@ String dateFormat({@required String date}) {
       ymd.substring(8) + '-' + ymd.substring(5, 7) + '-' + ymd.substring(0, 4);
   return dmy;
 }
+
+String userUid;
