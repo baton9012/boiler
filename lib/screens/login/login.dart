@@ -1,5 +1,8 @@
+import 'package:boiler/global.dart';
+import 'package:boiler/models/firebase_model.dart';
 import 'package:boiler/screens/tast_list/task_list.dart';
 import 'package:boiler/services/auth.dart';
+import 'package:boiler/services/db_firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sms_autofill/sms_autofill.dart';
@@ -153,10 +156,42 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => TaskList(),
+          builder: (context) => FutureBuilder(
+              future: writeToSQLite(),
+              builder: (context, snapshotData) {
+                if (snapshotData.hasData) {
+                  return TaskList();
+                } else {
+                  return Container(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircularProgressIndicator(),
+                        Text(
+                          'Подготовка \nбазы данных',
+                          style: h1Style,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              }),
         ),
       );
     }
+  }
+
+  Future<bool> writeToSQLite() async {
+    List<FirebaseModel> firebaseModels =
+        await FirebaseDBProvider.firebaseDB.getAllOrder();
+    for (int i = 0; i < firebaseModels.length; i++) {
+      if (firebaseModels[i].userId != userUid) {
+        firebaseModels.removeAt(i);
+      }
+    }
+    return FirebaseModel().recordToSQLite(firebaseModels: firebaseModels);
   }
 
   Future<void> isInBase() async {
