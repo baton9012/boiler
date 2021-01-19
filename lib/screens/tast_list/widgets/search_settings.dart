@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class SearchSetting extends StatefulWidget {
   var parentWidget;
 
-  static final int SearchBYNLP = 0;
-  static final int SearchBYCity = 1;
+  static const int SearchBYNLP = 0;
+  static const int SearchBYCity = 1;
 
   SearchSetting({this.parentWidget});
   @override

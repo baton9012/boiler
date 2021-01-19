@@ -12,17 +12,14 @@ class FirebaseDBProvider {
 
   DatabaseReference get databaseReference => _databaseReference;
 
-  List<String> uniqueIds = List<String>();
   List<FirebaseModel> firebaseModels = List<FirebaseModel>();
   FirebaseModel firebaseModel = FirebaseModel();
 
   Future<List<FirebaseModel>> getAllOrder() async {
     DataSnapshot snapshot = await _databaseReference.child('order/').once();
-    int i = 0;
     if (snapshot.value != null) {
       snapshot.value.forEach((key, value) {
         firebaseModels.add(firebaseModel.parseFirebaseModel(value, key));
-        uniqueIds.add(_databaseReference.child('order/').key);
       });
     }
     return firebaseModels;

@@ -43,7 +43,7 @@ class SQLiteDBProvider {
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 
-  void getConfig() async {
+  Future<void> getConfig() async {
     final db = await database;
     var res = await db.rawQuery('SELECT sort_type_id, lang_id '
         'FROM config ');

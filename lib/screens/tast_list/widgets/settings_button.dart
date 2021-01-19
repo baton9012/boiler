@@ -4,7 +4,7 @@ import 'package:boiler/screens/tast_list/widgets/inherited_task_list.dart';
 import 'package:flutter/material.dart';
 
 class SettingsButton extends StatelessWidget {
-  List<String> choices = ['Архив', 'Настройки'];
+  static const List<String> choices = ['Архив', 'Настройки'];
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(

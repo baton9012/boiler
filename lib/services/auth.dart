@@ -27,7 +27,7 @@ class Auth {
                       children: [
                         CircularProgressIndicator(),
                         Text(
-                          'Подготовка \nбазы данных',
+                          'Подготовка',
                           style: h1Style,
                           textAlign: TextAlign.center,
                         ),

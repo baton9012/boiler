@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:boiler/models/config.dart';
 import 'package:flutter/material.dart';
 
 Config config = Config();
 
 final TextStyle standardTextStyle = TextStyle(
-  fontSize: 17.0,
+  fontSize: 16.0,
   color: Colors.black,
 );
 final TextStyle titleLabelStyle = TextStyle(
-  fontSize: 17.0,
+  fontSize: 18.0,
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
@@ -27,4 +29,6 @@ String dateFormat({@required String date}) {
   return dmy;
 }
 
+bool isAndroid = Platform.isAndroid;
+bool hasPhonePermission;
 String userUid;

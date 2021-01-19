@@ -54,6 +54,7 @@ class FirebaseModel {
 
   FirebaseModel parseFirebaseModel(record, String id) {
     Map<String, dynamic> attributes = {
+      'userId': '',
       'address': '',
       'descriptionMaster': '',
       'descriptionCustomer': '',
@@ -70,6 +71,7 @@ class FirebaseModel {
 
     record.forEach((key, value) => {attributes[key] = value});
     FirebaseModel firebaseModel = FirebaseModel(
+      userId: attributes['userId'],
       id: id,
       address: attributes['address'],
       descriptionMaster: attributes['descriptionMaster'],
