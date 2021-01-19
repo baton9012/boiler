@@ -27,9 +27,11 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
     super.initState();
     listenForCode();
     SmsAutoFill().getAppSignature.then((signature) {
-      setState(() {
-        appSignature = signature;
-      });
+      if (mounted) {
+        setState(() {
+          appSignature = signature;
+        });
+      }
     });
   }
 

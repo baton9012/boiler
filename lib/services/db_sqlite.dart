@@ -51,33 +51,46 @@ class SQLiteDBProvider {
         res.map((c) => Config.fromMap(c)).toList().first.sortTypeId;
   }
 
-  void insertIntoTaskTitle(TaskTitleModel taskTitleModel) async {
+  Future<bool> insertIntoTaskTitle(TaskTitleModel taskTitleModel) async {
     final db = await database;
-    await db.rawInsert(
-        'INSERT INTO order_title (id, nlp, date_create, status, type, city, nlp_search, city_search, is_archive) '
-        'VALUES (${taskTitleModel.id}, '
-        '${taskTitleModel.nlp}, '
-        '${taskTitleModel.dateCreate}, '
-        '${taskTitleModel.status}, '
-        '${taskTitleModel.type}, '
-        '${taskTitleModel.city}, '
-        '${taskTitleModel.nlp.toUpperCase()}, '
-        '${taskTitleModel.city.toUpperCase()}, '
-        'null)');
+    int res = 0;
+    try {
+      res = await db.rawInsert(
+          'INSERT OR IGNORE INTO order_title (id, nlp, date_create, status, type, city, nlp_search, city_search, is_archive) '
+          'VALUES ('
+          '\'${taskTitleModel.id}\', '
+          '\'${taskTitleModel.nlp}\', '
+          '\'${taskTitleModel.dateCreate}\', '
+          '${taskTitleModel.status}, '
+          '\'${taskTitleModel.type}\', '
+          '\'${taskTitleModel.city}\', '
+          '\'${taskTitleModel.nlp.toUpperCase()}\', '
+          '\'${taskTitleModel.city.toUpperCase()}\', '
+          'null);');
+    } catch (e) {
+      print('insertIntoTaskTitle ${e.toString()}');
+    }
+    return res != 0;
   }
 
-  void insertIntoTask(TaskModel taskModel) async {
+  Future<bool> insertIntoTask(TaskModel taskModel) async {
     final db = await database;
-    await db.rawInsert(
-        'INSERT INTO (id_order, address, description_customer, description_master, date_attached, date_in_work, date_done, boiler_type) '
-        'VALUES (${taskModel.id}, '
-        '${taskModel.address}, '
-        '${taskModel.descriptionCustomer}, '
-        '${taskModel.descriptionMaster}, '
-        '${taskModel.dateAttached}, '
-        '${taskModel.dateInWork}, '
-        '${taskModel.dateDone}, '
-        '${taskModel.boilerType})');
+    int res = 0;
+    try {
+      res = await db.rawInsert(
+          'INSERT OR IGNORE INTO order_detail (id_order, address, description_customer, description_master, date_attached, date_in_work, date_done, boiler_type) '
+          'VALUES (\'${taskModel.id}\', '
+          '\'${taskModel.address}\', '
+          '\'${taskModel.descriptionCustomer}\', '
+          '\'${taskModel.descriptionMaster}\', '
+          '\'${taskModel.dateAttached}\', '
+          '\'${taskModel.dateInWork}\', '
+          '\'${taskModel.dateDone}\', '
+          '\'${taskModel.boilerType}\')');
+    } catch (e) {
+      print('insertIntoTask ${e.toString()}');
+    }
+    return res != 0;
   }
 
   Future<List<TaskTitleModel>> getAllTaskTitle(
@@ -122,8 +135,7 @@ class SQLiteDBProvider {
     return list;
   }
 
-  Future<TaskModel> getTaskDetail(int taskId) async {
-    print('getTaskDetail');
+  Future<TaskModel> getTaskDetail(String taskId) async {
     final db = await database;
     var res = await db.rawQuery('SELECT * FROM order_detail');
     TaskModel model = res.map((c) => TaskModel.fromMap(c)).first;
@@ -142,7 +154,7 @@ class SQLiteDBProvider {
   Future<int> updateStatus({
     int status,
     DateTime date,
-    DatabaseReference id,
+    String id,
   }) async {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '

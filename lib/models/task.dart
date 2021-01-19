@@ -1,7 +1,7 @@
 import 'package:boiler/models/task_title.dart';
 
 class TaskModel extends TaskTitleModel {
-  int id;
+  String id;
   String address;
   String descriptionCustomer;
   String descriptionMaster;

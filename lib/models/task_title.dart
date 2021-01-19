@@ -1,7 +1,5 @@
-import 'package:firebase_database/firebase_database.dart';
-
 class TaskTitleModel {
-  int id;
+  String id;
   String nlp;
   String type;
   String city;

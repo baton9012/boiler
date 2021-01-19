@@ -1,13 +1,11 @@
 import 'package:boiler/models/task.dart';
 import 'package:boiler/models/task_title.dart';
 import 'package:boiler/services/db_sqlite.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseModel {
-  DatabaseReference idDR;
   String userId;
-  int id;
+  String id;
   String address;
   String descriptionMaster;
   String descriptionCustomer;
@@ -22,6 +20,7 @@ class FirebaseModel {
   String dateCreatedOrder;
 
   FirebaseModel({
+    this.id,
     this.userId,
     this.address,
     this.descriptionMaster,
@@ -53,7 +52,7 @@ class FirebaseModel {
         'dateDone': dateDone,
       };
 
-  FirebaseModel parseFirebaseModel(record) {
+  FirebaseModel parseFirebaseModel(record, String id) {
     Map<String, dynamic> attributes = {
       'address': '',
       'descriptionMaster': '',
@@ -70,8 +69,8 @@ class FirebaseModel {
     };
 
     record.forEach((key, value) => {attributes[key] = value});
-
     FirebaseModel firebaseModel = FirebaseModel(
+      id: id,
       address: attributes['address'],
       descriptionMaster: attributes['descriptionMaster'],
       descriptionCustomer: attributes['descriptionCustomer'],
@@ -88,11 +87,13 @@ class FirebaseModel {
     return firebaseModel;
   }
 
-  void recordToSQLite({@required List<FirebaseModel> firebaseModels}) {
-    _toTaskTitleModel(firebaseModels).forEach(
-        (taskTitle) => SQLiteDBProvider.db.insertIntoTaskTitle(taskTitle));
-    _toTaskModel(firebaseModels)
-        .forEach((task) => SQLiteDBProvider.db.insertIntoTask(task));
+  bool recordToSQLite({@required List<FirebaseModel> firebaseModels}) {
+    bool res = false;
+    _toTaskTitleModel(firebaseModels).forEach((taskTitle) async =>
+        res = await SQLiteDBProvider.db.insertIntoTaskTitle(taskTitle));
+    _toTaskModel(firebaseModels).forEach(
+        (task) async => res = await SQLiteDBProvider.db.insertIntoTask(task));
+    return res;
   }
 
   List<TaskTitleModel> _toTaskTitleModel(List<FirebaseModel> firebaseModels) {
@@ -109,7 +110,7 @@ class FirebaseModel {
   }
 
   List<TaskModel> _toTaskModel(List<FirebaseModel> firebaseModels) {
-    List<TaskModel> list = List<TaskTitleModel>();
+    List<TaskModel> list = List<TaskModel>();
     firebaseModels.forEach((firebaseModel) => list.add(TaskModel(
           id: firebaseModel.id,
           address: firebaseModel.address,

@@ -46,7 +46,6 @@ class _ArchiveListState extends State<ArchiveList> {
                   child: Text(snapshot.error.toString()),
                 );
               } else if (snapshot.hasData) {
-                print(snapshot.data);
                 return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {

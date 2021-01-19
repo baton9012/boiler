@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DeleteDialog extends StatefulWidget {
   final int type;
-  final int id;
+  final String id;
 
   const DeleteDialog({
     this.type,

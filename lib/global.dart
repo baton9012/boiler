@@ -12,6 +12,13 @@ final TextStyle titleLabelStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
+final TextStyle h1Style = TextStyle(
+  fontSize: 32.0,
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+  decoration: TextDecoration.none,
+  letterSpacing: 2.0,
+);
 
 String dateFormat({@required String date}) {
   String ymd = date.substring(0, 10);
