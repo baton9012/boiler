@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../global.dart';
 
 class ListItem extends StatelessWidget {
-  final TaskTitle taskTitle;
+  final TaskTitleModel taskTitle;
   final Function navigateToDetail;
 
   const ListItem({this.taskTitle, this.navigateToDetail});

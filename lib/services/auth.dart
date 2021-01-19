@@ -13,12 +13,17 @@ class Auth {
       stream: _firebaseAuthInstance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          getUserId(snapshot.data);
           return TaskList();
         } else {
           return LoginScreen();
         }
       },
     );
+  }
+
+  void getUserId(var data) async {
+    userUid = data.uid;
   }
 
   signOut() {

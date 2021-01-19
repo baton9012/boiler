@@ -1,4 +1,3 @@
-import 'package:boiler/services/db_sqlite.dart';
 import 'package:flutter/material.dart';
 
 class DeleteDialog extends StatefulWidget {
@@ -59,12 +58,12 @@ class _DeleteDialogState extends State<DeleteDialog> {
   }
 
   void onPress() {
-    if (widget.type == 0) {
-      SQLiteDBProvider.db.deleteTask(widget.id);
-    } else if (widget.type == 1) {
-      SQLiteDBProvider.db.archiveTask(widget.id);
-    } else {
-      SQLiteDBProvider.db.unarchive(widget.id);
-    }
+    // if (widget.type == 0) {
+    //   SQLiteDBProvider.db.deleteTask(widget.id);
+    // } else if (widget.type == 1) {
+    //   SQLiteDBProvider.db.archiveTask(widget.id);
+    // } else {
+    //   SQLiteDBProvider.db.unarchive(widget.id);
+    // }
   }
 }

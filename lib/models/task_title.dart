@@ -1,4 +1,6 @@
-class TaskTitle {
+import 'package:firebase_database/firebase_database.dart';
+
+class TaskTitleModel {
   int id;
   String nlp;
   String type;
@@ -6,7 +8,7 @@ class TaskTitle {
   String dateCreate;
   int status;
 
-  TaskTitle({
+  TaskTitleModel({
     this.id,
     this.nlp,
     this.type,
@@ -15,7 +17,8 @@ class TaskTitle {
     this.status,
   });
 
-  factory TaskTitle.fromMap(Map<String, dynamic> taskTitleJson) => TaskTitle(
+  factory TaskTitleModel.fromMap(Map<String, dynamic> taskTitleJson) =>
+      TaskTitleModel(
         id: taskTitleJson['id'],
         nlp: taskTitleJson['nlp'],
         type: taskTitleJson['type'],

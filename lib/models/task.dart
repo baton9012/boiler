@@ -1,6 +1,6 @@
 import 'package:boiler/models/task_title.dart';
 
-class Task extends TaskTitle {
+class TaskModel extends TaskTitleModel {
   int id;
   String address;
   String descriptionCustomer;
@@ -10,7 +10,7 @@ class Task extends TaskTitle {
   String dateDone;
   String boilerType;
 
-  Task({
+  TaskModel({
     this.id,
     this.address,
     this.dateAttached,
@@ -21,7 +21,7 @@ class Task extends TaskTitle {
     this.descriptionMaster,
   });
 
-  factory Task.fromMap(Map<String, dynamic> taskJson) => Task(
+  factory TaskModel.fromMap(Map<String, dynamic> taskJson) => TaskModel(
         id: taskJson['id'],
         address: taskJson['address'],
         dateAttached: taskJson['date_attached'],

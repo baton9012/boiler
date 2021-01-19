@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:boiler/models/config.dart';
 import 'package:boiler/models/task.dart';
 import 'package:boiler/models/task_title.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -50,7 +51,36 @@ class SQLiteDBProvider {
         res.map((c) => Config.fromMap(c)).toList().first.sortTypeId;
   }
 
-  Future<List<TaskTitle>> getAllTaskTitle(
+  void insertIntoTaskTitle(TaskTitleModel taskTitleModel) async {
+    final db = await database;
+    await db.rawInsert(
+        'INSERT INTO order_title (id, nlp, date_create, status, type, city, nlp_search, city_search, is_archive) '
+        'VALUES (${taskTitleModel.id}, '
+        '${taskTitleModel.nlp}, '
+        '${taskTitleModel.dateCreate}, '
+        '${taskTitleModel.status}, '
+        '${taskTitleModel.type}, '
+        '${taskTitleModel.city}, '
+        '${taskTitleModel.nlp.toUpperCase()}, '
+        '${taskTitleModel.city.toUpperCase()}, '
+        'null)');
+  }
+
+  void insertIntoTask(TaskModel taskModel) async {
+    final db = await database;
+    await db.rawInsert(
+        'INSERT INTO (id_order, address, description_customer, description_master, date_attached, date_in_work, date_done, boiler_type) '
+        'VALUES (${taskModel.id}, '
+        '${taskModel.address}, '
+        '${taskModel.descriptionCustomer}, '
+        '${taskModel.descriptionMaster}, '
+        '${taskModel.dateAttached}, '
+        '${taskModel.dateInWork}, '
+        '${taskModel.dateDone}, '
+        '${taskModel.boilerType})');
+  }
+
+  Future<List<TaskTitleModel>> getAllTaskTitle(
       {@required String searchText, int serchType}) async {
     final db = await database;
     String query = 'SELECT id, type, nlp, city, date_create, status '
@@ -64,36 +94,40 @@ class SQLiteDBProvider {
           'ORDER BY ${orderByTaskTitle()}';
     }
     var res = await db.rawQuery(query);
-    List<TaskTitle> list = res.map((c) => TaskTitle.fromMap(c)).toList();
+    List<TaskTitleModel> list =
+        res.map((c) => TaskTitleModel.fromMap(c)).toList();
     return list;
   }
 
-  Future<List<TaskTitle>> getAllArchiveTaskTitle() async {
+  Future<List<TaskTitleModel>> getAllArchiveTaskTitle() async {
     final db = await database;
     String query = 'SELECT id, type, nlp, city, date_create, status '
         'FROM order_title '
         'WHERE is_archive = 1 '
         'ORDER BY ${orderByTaskTitle()}';
     var res = await db.rawQuery(query);
-    List<TaskTitle> list = res.map((e) => TaskTitle.fromMap(e)).toList();
+    List<TaskTitleModel> list =
+        res.map((e) => TaskTitleModel.fromMap(e)).toList();
     return list;
   }
 
-  Future<TaskTitle> getTaskTitle({int id}) async {
+  Future<TaskTitleModel> getTaskTitle({int id}) async {
     final db = await database;
     var res =
         await db.rawQuery('SELECT id, type, nlp, city, date_create, status '
             'FROM order_title '
             'WHERE id = $id');
-    TaskTitle list = res.map((c) => TaskTitle.fromMap(c)).toList().first;
+    TaskTitleModel list =
+        res.map((c) => TaskTitleModel.fromMap(c)).toList().first;
     return list;
   }
 
-  Future<Task> getTaskDetail(int taskId) async {
+  Future<TaskModel> getTaskDetail(int taskId) async {
+    print('getTaskDetail');
     final db = await database;
     var res = await db.rawQuery('SELECT * FROM order_detail');
-    Task list = res.map((c) => Task.fromMap(c)).first;
-    return list;
+    TaskModel model = res.map((c) => TaskModel.fromMap(c)).first;
+    return model;
   }
 
   Future<int> updateToOrderDetailMasterDescription(
@@ -105,7 +139,11 @@ class SQLiteDBProvider {
     return res;
   }
 
-  Future<int> updateStatus({int status, DateTime date, int id}) async {
+  Future<int> updateStatus({
+    int status,
+    DateTime date,
+    DatabaseReference id,
+  }) async {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET status = $status '
@@ -116,7 +154,7 @@ class SQLiteDBProvider {
     return res;
   }
 
-  Future<int> archiveTask(int id) async {
+  Future<int> archiveTask(DatabaseReference id) async {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET is_archive = 1 '
@@ -124,14 +162,14 @@ class SQLiteDBProvider {
     return res;
   }
 
-  Future<int> deleteTask(int id) async {
+  Future<int> deleteTask(DatabaseReference id) async {
     final db = await database;
     var res = await db.rawDelete(
         'DELETE FROM order_title WHERE id = $id; DELETE FROM order_detail WHERE id_order = $id');
     return res;
   }
 
-  Future<int> unarchive(int id) async {
+  Future<int> unarchive(DatabaseReference id) async {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET is_archive = null '

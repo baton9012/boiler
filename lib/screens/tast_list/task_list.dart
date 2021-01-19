@@ -26,7 +26,7 @@ class _TaskListState extends State<TaskList> {
   IconData statusIcon;
   Color statusIconColor;
   bool isSearchByNLP = true;
-  Future<List<TaskTitle>> fTaskTitle;
+  Future<List<TaskTitleModel>> fTaskTitle;
   bool isNeedUpdate = false;
 
   @override
@@ -81,7 +81,7 @@ class _TaskListState extends State<TaskList> {
             ),
           ],
         ),
-        body: FutureBuilder<List<TaskTitle>>(
+        body: FutureBuilder<List<TaskTitleModel>>(
           future: fTaskTitle,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
@@ -92,13 +92,13 @@ class _TaskListState extends State<TaskList> {
               case ConnectionState.done:
                 if (snapshot.hasError) {
                   return Center(
-                    child: Text(snapshot.error.toString()),
+                    child: Text('task title ${snapshot.error}'),
                   );
                 } else if (snapshot.hasData) {
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
-                      TaskTitle item = snapshot.data[index];
+                      TaskTitleModel item = snapshot.data[index];
                       return item.status == 2
                           ? Dismissible(
                               confirmDismiss: (direction) {
@@ -167,7 +167,7 @@ class _TaskListState extends State<TaskList> {
     );
   }
 
-  void navigateToDetail(TaskTitle taskTitle) async {
+  void navigateToDetail(TaskTitleModel taskTitle) async {
     var res = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TaskDetail(

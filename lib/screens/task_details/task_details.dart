@@ -1,14 +1,16 @@
+import 'package:boiler/models/firebase_model.dart';
 import 'package:boiler/models/task.dart';
 import 'package:boiler/models/task_title.dart';
 import 'package:boiler/screens/task_details/widgets/progress_bar.dart';
 import 'package:boiler/screens/task_details/widgets/text_detail.dart';
+import 'package:boiler/services/db_firebase.dart';
 import 'package:boiler/services/db_sqlite.dart';
 import 'package:flutter/material.dart';
 
 import '../../global.dart';
 
 class TaskDetail extends StatefulWidget {
-  final TaskTitle taskTitle;
+  final TaskTitleModel taskTitle;
 
   const TaskDetail({@required this.taskTitle});
 
@@ -24,8 +26,9 @@ class _TaskDetailState extends State<TaskDetail> {
   bool isNeedStatusButton = true;
   AppBar appBar;
   TextEditingController textEditingController = TextEditingController();
-  Task task;
+  TaskModel task;
   bool isChangeStatus = false;
+  FirebaseModel fireBaseModel;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class _TaskDetailState extends State<TaskDetail> {
           child: Container(
             height: height - appBar.preferredSize.height,
             padding: const EdgeInsets.all(12.0),
-            child: FutureBuilder<Task>(
+            child: FutureBuilder<TaskModel>(
                 future: SQLiteDBProvider.db.getTaskDetail(widget.taskTitle.id),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
@@ -54,6 +57,7 @@ class _TaskDetailState extends State<TaskDetail> {
                         );
                       } else if (snapshot.hasData) {
                         task = snapshot.data;
+                        task.id = widget.taskTitle.id;
                         return Column(
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,6 +190,7 @@ class _TaskDetailState extends State<TaskDetail> {
       date: DateTime.now(),
       id: widget.taskTitle.id,
     );
+    FirebaseDBProvider.firebaseDB.updateFirebaseRecord(taskModel: task);
     setState(() {
       isChangeStatus = true;
       statusToString(widget.taskTitle.status);
