@@ -1,6 +1,6 @@
 # boiler
 
-A new Flutter application.
+Project for task management
 
 ## Getting Started
 
