@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 
 class SettingsButton extends StatelessWidget {
   static const List<String> choices = ['Архив', 'Настройки'];
+  static const Map<String, IconData> iconData = {
+    'Архив': Icons.archive,
+    'Настройки': Icons.settings
+  };
+
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      elevation: 3.0,
+      padding: EdgeInsets.all(8),
       initialValue: choices[1],
       itemBuilder: (BuildContext context) {
         return choices
@@ -18,7 +23,18 @@ class SettingsButton extends StatelessWidget {
                   onPressed: () {
                     navigate(context, buttonTitle);
                   },
-                  child: Text(buttonTitle),
+                  child: Row(
+                    children: [
+                      Icon(
+                        iconData[buttonTitle],
+                        color: Colors.black.withOpacity(0.7),
+                      ),
+                      SizedBox(
+                        width: 8.0,
+                      ),
+                      Text(buttonTitle),
+                    ],
+                  ),
                 ),
               ),
             )

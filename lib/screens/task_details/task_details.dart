@@ -97,7 +97,7 @@ class _TaskDetailState extends State<TaskDetail> {
                             data: task.address,
                           ),
                           TextDetail(
-                            title: 'Примечание:',
+                            title: 'Примечание: ',
                             data: '',
                           ),
                           TextDetail(
@@ -190,7 +190,11 @@ class _TaskDetailState extends State<TaskDetail> {
       date: DateTime.now(),
       id: widget.taskTitle.id,
     );
-    FirebaseDBProvider.firebaseDB.updateFirebaseRecord(taskModel: task);
+    print('updateStatusDB ${widget.taskTitle.id}');
+    FirebaseDBProvider.firebaseDB.updateFirebaseRecord(
+      taskModel: task,
+      taskTitleModel: widget.taskTitle,
+    );
     setState(() {
       isChangeStatus = true;
       statusToString(widget.taskTitle.status);

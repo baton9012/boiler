@@ -56,7 +56,7 @@ class _SelectLanguageDialogState extends State<SelectLanguageDialog> {
       actions: [
         FlatButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(selectedLanguage);
           },
           child: Text('Сохранить'),
         ),

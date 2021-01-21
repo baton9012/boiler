@@ -3,6 +3,7 @@ import 'package:boiler/models/task_title.dart';
 import 'package:boiler/screens/task_details/task_details.dart';
 import 'package:boiler/screens/tast_list/widgets/list_item.dart';
 import 'package:boiler/services/db_sqlite.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class ArchiveList extends StatefulWidget {
 class _ArchiveListState extends State<ArchiveList> {
   Future<List<TaskTitleModel>> fTaskTitle;
   bool isNeedUpdate = false;
-
+  AppLocalizations appLocalizations;
   @override
   void initState() {
     super.initState();
@@ -23,6 +24,7 @@ class _ArchiveListState extends State<ArchiveList> {
 
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -30,7 +32,7 @@ class _ArchiveListState extends State<ArchiveList> {
             onPressed: () {
               Navigator.of(context).pop(isNeedUpdate);
             }),
-        title: Text('Архив'),
+        title: Text(appLocalizations.translate('archive')),
       ),
       body: FutureBuilder<List<TaskTitleModel>>(
         future: fTaskTitle,

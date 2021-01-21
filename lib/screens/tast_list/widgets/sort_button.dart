@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../global.dart';
 
 class SortButton extends StatefulWidget {
-  Function callBack;
+  final Function callBack;
 
   SortButton({this.callBack});
 

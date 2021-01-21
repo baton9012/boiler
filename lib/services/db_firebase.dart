@@ -1,5 +1,6 @@
 import 'package:boiler/models/firebase_model.dart';
 import 'package:boiler/models/task.dart';
+import 'package:boiler/models/task_title.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseDBProvider {
@@ -14,6 +15,7 @@ class FirebaseDBProvider {
 
   List<FirebaseModel> firebaseModels = List<FirebaseModel>();
   FirebaseModel firebaseModel = FirebaseModel();
+  List<DatabaseReference> idRef = List<DatabaseReference>();
 
   Future<List<FirebaseModel>> getAllOrder() async {
     DataSnapshot snapshot = await _databaseReference.child('order/').once();
@@ -25,10 +27,11 @@ class FirebaseDBProvider {
     return firebaseModels;
   }
 
-  void updateFirebaseRecord({TaskModel taskModel}) {
-    firebaseModel.update(task: taskModel);
+  void updateFirebaseRecord(
+      {TaskTitleModel taskTitleModel, TaskModel taskModel}) {
+    firebaseModel.update(task: taskModel, taskTitle: taskTitleModel);
     _databaseReference
-        .child('post/${taskModel.id}')
+        .child('order/' + taskTitleModel.id)
         .update(firebaseModel.toJSON());
   }
 

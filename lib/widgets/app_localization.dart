@@ -9,11 +9,10 @@ class AppLocalizations {
   AppLocalizations(this.locale);
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+      _AppLocalizationDelegate();
 
-  static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
-  }
+  static AppLocalizations of(BuildContext context) =>
+      Localizations.of<AppLocalizations>(context, AppLocalizations);
 
   Map<String, String> _localizedStrings;
 
@@ -33,9 +32,8 @@ class AppLocalizations {
   }
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
-  const _AppLocalizationsDelegate();
+class _AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationDelegate();
 
   @override
   bool isSupported(Locale locale) {
@@ -50,5 +48,6 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(LocalizationsDelegate<AppLocalizations> old) => false;
+  bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) =>
+      false;
 }

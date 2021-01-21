@@ -4,7 +4,13 @@ import 'package:boiler/models/config.dart';
 import 'package:flutter/material.dart';
 
 Config config = Config();
-
+final TextStyle hintTextStyle = TextStyle(
+  fontSize: 11.0,
+  color: Colors.black,
+  decoration: TextDecoration.none,
+  letterSpacing: 0.5,
+  fontWeight: FontWeight.bold,
+);
 final TextStyle standardTextStyle = TextStyle(
   fontSize: 16.0,
   color: Colors.black,

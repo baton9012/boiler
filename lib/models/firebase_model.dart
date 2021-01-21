@@ -126,18 +126,18 @@ class FirebaseModel {
     return list;
   }
 
-  FirebaseModel update({TaskModel task}) {
+  FirebaseModel update({TaskModel task, TaskTitleModel taskTitle}) {
     FirebaseModel firebaseModel = FirebaseModel(
       address: task.address,
       descriptionMaster: task.descriptionMaster,
-      descriptionCustomer: task.descriptionMaster,
+      descriptionCustomer: task.descriptionCustomer,
       dateAttached: task.dateAttached,
-      status: task.status,
+      status: taskTitle.status + 1,
       boilerType: task.boilerType,
-      nlpCustomer: task.nlp,
-      type: task.type,
-      city: task.city,
-      dateCreatedOrder: task.dateCreate,
+      nlpCustomer: taskTitle.nlp,
+      type: taskTitle.type,
+      city: taskTitle.city,
+      dateCreatedOrder: taskTitle.dateCreate,
       dateInWork: task.dateInWork,
       dateDone: task.dateDone,
     );

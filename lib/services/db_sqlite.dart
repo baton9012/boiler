@@ -129,7 +129,7 @@ class SQLiteDBProvider {
     var res =
         await db.rawQuery('SELECT id, type, nlp, city, date_create, status '
             'FROM order_title '
-            'WHERE id = $id');
+            'WHERE id = \'$id\'');
     TaskTitleModel list =
         res.map((c) => TaskTitleModel.fromMap(c)).toList().first;
     return list;
@@ -147,7 +147,7 @@ class SQLiteDBProvider {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_detail '
         'SET description_master = \'$description\' '
-        'WHERE id_order = $id');
+        'WHERE id_order = \'$id\'');
     return res;
   }
 
@@ -159,10 +159,10 @@ class SQLiteDBProvider {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET status = $status '
-        'WHERE id = $id; '
+        'WHERE id = \'$id\'; '
         'UPDATE order_detail '
         'SET ${updateDate(date: date, status: status)} '
-        'WHERE id_order = $id');
+        'WHERE id_order = \'$id\'');
     return res;
   }
 
@@ -170,14 +170,14 @@ class SQLiteDBProvider {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET is_archive = 1 '
-        'WHERE id = $id ');
+        'WHERE id = \'$id\' ');
     return res;
   }
 
   Future<int> deleteTask(DatabaseReference id) async {
     final db = await database;
-    var res = await db.rawDelete(
-        'DELETE FROM order_title WHERE id = $id; DELETE FROM order_detail WHERE id_order = $id');
+    var res = await db.rawDelete('DELETE FROM order_title WHERE id = \'$id\'; '
+        'DELETE FROM order_detail WHERE id_order = \'$id\'');
     return res;
   }
 
@@ -185,7 +185,7 @@ class SQLiteDBProvider {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET is_archive = null '
-        'WHERE id = $id ');
+        'WHERE id = \'$id\' ');
     return res;
   }
 

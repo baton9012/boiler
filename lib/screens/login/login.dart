@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:boiler/global.dart';
-import 'package:boiler/models/firebase_model.dart';
-import 'package:boiler/screens/tast_list/task_list.dart';
 import 'package:boiler/services/auth.dart';
-import 'package:boiler/services/db_firebase.dart';
+import 'package:boiler/widgets/app_localization.dart';
+import 'package:boiler/widgets/prepare_db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_number/mobile_number.dart';
@@ -17,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  AppLocalizations appLocalizations;
   TextEditingController _phoneNumberController = TextEditingController(
     text: '+380',
   );
@@ -28,7 +27,8 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
   RegExp _phoneNumberRegExp = RegExp('^(?:[+0]9)?[0-9]{10}\$');
   Icon _passwordSuffixIcon = Icon(Icons.remove_red_eye_rounded);
   String appSignature = "LhCVFTY9uq2";
-  String supText = '';
+  String hintForPassword = '';
+  String hintForPhoneNum = '';
 
   @override
   void initState() {
@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
 
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
     return Scaffold(
       body: Column(
         children: [
@@ -70,9 +71,10 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
                     keyboardType: TextInputType.phone,
                     validator: (phoneNumber) {
                       if (phoneNumber.length < 13) {
-                        return 'Мало символов';
+                        return appLocalizations.translate('few_characters');
                       } else if (_phoneNumberRegExp.hasMatch(phoneNumber)) {
-                        return 'Это не номер телефона';
+                        return appLocalizations
+                            .translate('this_is_not_a_phone_number');
                       }
                       return null;
                     },
@@ -89,13 +91,22 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
                     controller: _phoneNumberController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.phone),
-                      labelText: 'Тел. номер',
+                      labelText: appLocalizations.translate('phone_number'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
                         ),
                       ),
                     ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        hintForPhoneNum,
+                        style: hintTextStyle,
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
                   ),
                   SizedBox(height: 16.0),
                   TextFieldPinAutoFill(
@@ -115,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
                         },
                       ),
                       prefixIcon: Icon(Icons.vpn_key),
-                      labelText: 'Пароль',
+                      labelText: appLocalizations.translate('password'),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(15),
@@ -123,7 +134,11 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
                       ),
                     ),
                   ),
-                  Text(supText),
+                  Row(
+                    children: [
+                      Text(hintForPassword, style: hintTextStyle),
+                    ],
+                  ),
                   SizedBox(height: 16.0),
                   RaisedButton(
                     shape: OutlineInputBorder(
@@ -142,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
                       children: [
                         Spacer(),
                         Text(
-                          'Войти',
+                          appLocalizations.translate('enter'),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,
@@ -186,7 +201,8 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
             builder: (context, snapshot) => snapshot.hasData
                 ? AlertDialog(
                     title: Text(
-                      'Выберите рабочий номер телефона из списка',
+                      appLocalizations
+                          .translate('select_phone_number_from_list'),
                       style: titleLabelStyle,
                     ),
                     content: ListView.builder(
@@ -211,7 +227,14 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
         );
       } else {
         print("number ${await MobileNumber.getSimCards}");
+        setState(() {
+          hintForPhoneNum = appLocalizations.translate('enter_phone_number');
+        });
       }
+    } else {
+      setState(() {
+        hintForPhoneNum = appLocalizations.translate('enter_phone_number');
+      });
     }
   }
 
@@ -221,51 +244,20 @@ class _LoginScreenState extends State<LoginScreen> with CodeAutoFill {
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => FutureBuilder(
-              future: writeToSQLite(),
-              builder: (context, snapshotData) {
-                if (snapshotData.hasData) {
-                  return TaskList();
-                } else {
-                  return Container(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CircularProgressIndicator(),
-                        Text(
-                          'Подготовка',
-                          style: h1Style,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              }),
+          builder: (context) => PrepareDbWidget(),
         ),
       );
     }
   }
 
   void timerForAutoInputPass() {
-    Timer(Duration(seconds: 80), () {
-      setState(() {
-        supText = 'Введите пароль из смс';
+    if (mounted) {
+      Timer(Duration(seconds: 80), () {
+        setState(() {
+          hintForPassword = appLocalizations.translate('enter_password_from_sms');
+        });
       });
-    });
-  }
-
-  Future<bool> writeToSQLite() async {
-    List<FirebaseModel> firebaseModels =
-        await FirebaseDBProvider.firebaseDB.getAllOrder();
-    for (int i = 0; i < firebaseModels.length; i++) {
-      if (firebaseModels[i].userId != userUid) {
-        firebaseModels.removeAt(i);
-        i--;
-      }
     }
-    return FirebaseModel().recordToSQLite(firebaseModels: firebaseModels);
   }
 
   Future<void> isInBase() async {

@@ -44,7 +44,7 @@ class _SearchSettingState extends State<SearchSetting> {
               });
             },
             child: Text(
-              'Город',
+              'Населенный пункт',
               style: TextStyle(fontSize: 17.0, color: Colors.white),
             ),
           ),
