@@ -1,5 +1,7 @@
 import 'package:boiler/dialog_window/select_language_dialog.dart';
 import 'package:boiler/dialog_window/sort_dialog.dart';
+import 'package:boiler/main.dart';
+import 'package:boiler/models/sotr_items.dart';
 import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +42,7 @@ class _SettingsState extends State<Settings> {
                 showDialog(
                   context: context,
                   barrierDismissible: false,
-                  child: SortDialog(),
+                  child: SortDialog(local: appLocalizations),
                 );
               },
             ),
@@ -50,7 +52,7 @@ class _SettingsState extends State<Settings> {
                 color: Colors.black87,
                 size: 32.0,
               ),
-              title: Text('Язык'),
+              title: Text(appLocalizations.translate('language')),
               subtitle: Text(languageTitle()),
               onTap: () {
                 showDialog(
@@ -69,15 +71,15 @@ class _SettingsState extends State<Settings> {
   String sortTitle() {
     switch (config.sortTypeId) {
       case 0:
-        return 'Дата добавления';
+        return SortItems.getSortItems(appLocalizations)[0].title;
       case 1:
-        return 'Тип работы';
+        return SortItems.getSortItems(appLocalizations)[1].title;
       case 2:
-        return 'Имя заказчика';
+        return SortItems.getSortItems(appLocalizations)[2].title;
       case 3:
-        return 'Статус';
+        return SortItems.getSortItems(appLocalizations)[3].title;
       case 4:
-        return 'Населенный пункт';
+        return SortItems.getSortItems(appLocalizations)[4].title;
       default:
         return '';
     }
@@ -99,12 +101,15 @@ class _SettingsState extends State<Settings> {
       switch (value) {
         case 0:
           config.localeTitle = "ru";
+          MainControl.of(context).updateLocal();
           break;
         case 1:
           config.localeTitle = "uk";
+          MainControl.of(context).updateLocal();
           break;
         default:
           config.localeTitle = "en";
+          MainControl.of(context).updateLocal();
       }
     });
   }

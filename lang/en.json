@@ -22,11 +22,21 @@
   "description_job_done" : "Description of the work done",
   "task_detail" : "Task detail",
   "attached" : "Attached",
-  "in_work" : "In work",
+  "in_work" : "Working",
   "done" : "Done",
   "lnp" : "Name",
   "archive" : "Archive",
   "task_list" : "Task list",
   "search" : "Search",
-  "prepare" : "Prepare"
+  "prepare" : "Prepare",
+  "save" : "Save",
+  "cancel" : "Cancel",
+  "select_language" : "Select language",
+  "delete" : "Delete",
+  "archive_task" : "Archive",
+  "unarchive_task" : "Unarchive",
+  "ask_delete_task" : "Are you sure delete task",
+  "ask_archive_task" : "Are you sure archive task",
+  "ask_unarchive_task" : "Are you sure unarchive task",
+  "select_default_sort" : "Select sort by default"
 }

@@ -2,12 +2,12 @@ import 'package:boiler/global.dart';
 import 'package:boiler/models/firebase_model.dart';
 import 'package:boiler/screens/tast_list/task_list.dart';
 import 'package:boiler/services/db_firebase.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PrepareDbWidget extends StatelessWidget {
   final User data;
-
   PrepareDbWidget({this.data});
 
   @override
@@ -25,7 +25,7 @@ class PrepareDbWidget extends StatelessWidget {
                 children: [
                   CircularProgressIndicator(),
                   Text(
-                    'Подготовка',
+                    AppLocalizations.of(context).translate('prepare'),
                     style: h1Style,
                     textAlign: TextAlign.center,
                   ),

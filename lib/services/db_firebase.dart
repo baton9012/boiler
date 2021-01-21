@@ -28,10 +28,16 @@ class FirebaseDBProvider {
   }
 
   void updateFirebaseRecord(
-      {TaskTitleModel taskTitleModel, TaskModel taskModel}) {
-    firebaseModel.update(task: taskModel, taskTitle: taskTitleModel);
+      {TaskTitleModel taskTitleModel,
+      TaskModel taskModel,
+      bool isUpdateStatus = false}) {
+    firebaseModel = firebaseModel.update(
+        task: taskModel,
+        taskTitle: taskTitleModel,
+        isUpdateStatus: isUpdateStatus);
     _databaseReference
-        .child('order/' + taskTitleModel.id)
+        .child('order/')
+        .child(taskTitleModel.id)
         .update(firebaseModel.toJSON());
   }
 

@@ -1,17 +1,22 @@
 import 'package:boiler/screens/archive/archive_list.dart';
 import 'package:boiler/screens/setteings/settings.dart';
 import 'package:boiler/screens/tast_list/widgets/inherited_task_list.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class SettingsButton extends StatelessWidget {
-  static const List<String> choices = ['Архив', 'Настройки'];
-  static const Map<String, IconData> iconData = {
-    'Архив': Icons.archive,
-    'Настройки': Icons.settings
-  };
-
+  List<String> choices;
   @override
   Widget build(BuildContext context) {
+    choices = [
+      AppLocalizations.of(context).translate('archive'),
+      AppLocalizations.of(context).translate('settings')
+    ];
+
+    Map<String, IconData> iconData = {
+      choices[0]: Icons.archive,
+      choices[1]: Icons.settings
+    };
     return PopupMenuButton(
       padding: EdgeInsets.all(8),
       initialValue: choices[1],

@@ -1,12 +1,14 @@
 import 'package:boiler/models/sotr_items.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../global.dart';
 
 class SortButton extends StatefulWidget {
   final Function callBack;
+  final AppLocalizations local;
 
-  SortButton({this.callBack});
+  SortButton({this.callBack, this.local});
 
   @override
   _SortButtonState createState() => _SortButtonState();
@@ -14,12 +16,11 @@ class SortButton extends StatefulWidget {
 
 class _SortButtonState extends State<SortButton> {
   List<SortItems> sortItems = List<SortItems>();
-  SortItems sortItem = SortItems();
 
   @override
   void initState() {
     super.initState();
-    sortItems = sortItem.getSortItems();
+    sortItems = SortItems.getSortItems(widget.local);
   }
 
   @override

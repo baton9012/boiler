@@ -126,13 +126,14 @@ class FirebaseModel {
     return list;
   }
 
-  FirebaseModel update({TaskModel task, TaskTitleModel taskTitle}) {
+  FirebaseModel update(
+      {TaskModel task, TaskTitleModel taskTitle, bool isUpdateStatus}) {
     FirebaseModel firebaseModel = FirebaseModel(
       address: task.address,
       descriptionMaster: task.descriptionMaster,
       descriptionCustomer: task.descriptionCustomer,
       dateAttached: task.dateAttached,
-      status: taskTitle.status + 1,
+      status: isUpdateStatus ? taskTitle.status + 1 : taskTitle.status,
       boilerType: task.boilerType,
       nlpCustomer: taskTitle.nlp,
       type: taskTitle.type,

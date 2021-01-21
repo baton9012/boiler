@@ -1,3 +1,4 @@
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class SearchSetting extends StatefulWidget {
@@ -12,8 +13,11 @@ class SearchSetting extends StatefulWidget {
 }
 
 class _SearchSettingState extends State<SearchSetting> {
+  AppLocalizations appLocalizations;
+
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
@@ -30,7 +34,7 @@ class _SearchSettingState extends State<SearchSetting> {
                 ? Colors.blue.shade900.withOpacity(0.5)
                 : Colors.blue,
             child: Text(
-              'ФИО',
+              appLocalizations.translate('lnp'),
               style: TextStyle(fontSize: 17.0, color: Colors.white),
             ),
           ),
@@ -44,7 +48,7 @@ class _SearchSettingState extends State<SearchSetting> {
               });
             },
             child: Text(
-              'Населенный пункт',
+              appLocalizations.translate('city'),
               style: TextStyle(fontSize: 17.0, color: Colors.white),
             ),
           ),

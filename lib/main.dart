@@ -13,44 +13,52 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ru', 'RU'),
-        Locale('uk', 'UA')
-      ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      locale: fromStringtoLocale(),
-      localeResolutionCallback: (locale, supportedLocales) {
-        if (config.localeTitle == null) {
-          for (var supportedLocale in supportedLocales) {
-            if (supportedLocale.languageCode == locale.languageCode) {
-              config.localeTitle = supportedLocale.languageCode;
-              return supportedLocale;
+    return MainControl(
+      updateLocal: updateLocal,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        supportedLocales: [
+          Locale('en', 'US'),
+          Locale('ru', 'RU'),
+          Locale('uk', 'UA')
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        locale: fromStringToLocale(),
+        localeResolutionCallback: (locale, supportedLocales) {
+          if (config.localeTitle == null) {
+            for (var supportedLocale in supportedLocales) {
+              if (supportedLocale.languageCode == locale.languageCode) {
+                config.localeTitle = supportedLocale.languageCode;
+                return supportedLocale;
+              }
             }
+            config.localeTitle = supportedLocales.first.languageCode;
+            return supportedLocales.first;
           }
-          config.localeTitle = supportedLocales.first.languageCode;
-          return supportedLocales.first;
-        }
-        return fromStringtoLocale(choice: config.localeTitle);
-      },
-      home: Auth().handleAuth(),
+          return fromStringToLocale(choice: config.localeTitle);
+        },
+        home: Auth().handleAuth(),
+      ),
     );
   }
 
-  Locale fromStringtoLocale({String choice}) {
+  Locale fromStringToLocale({String choice}) {
     if (choice == null) {
       choice = config.localeTitle;
     }
@@ -62,5 +70,26 @@ class MyApp extends StatelessWidget {
       case 'uk':
         return Locale('uk', 'UA');
     }
+  }
+
+  void updateLocal() {
+    setState(() {
+      fromStringToLocale();
+    });
+  }
+}
+
+class MainControl extends InheritedWidget {
+  final Function updateLocal;
+  final Widget child;
+
+  MainControl({this.updateLocal, this.child});
+
+  static MainControl of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(MainControl);
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) {
+    return true;
   }
 }

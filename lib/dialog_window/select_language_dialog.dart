@@ -1,3 +1,4 @@
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class SelectLanguageDialog extends StatefulWidget {
@@ -7,11 +8,14 @@ class SelectLanguageDialog extends StatefulWidget {
 
 class _SelectLanguageDialogState extends State<SelectLanguageDialog> {
   int selectedLanguage = 0;
+  AppLocalizations appLocalizations;
+  static List<String> _supportedLocale = ['ru', 'uk', 'en'];
 
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
     return AlertDialog(
-      title: Text('Выберите язык'),
+      title: Text(appLocalizations.translate('select_language')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -58,13 +62,14 @@ class _SelectLanguageDialogState extends State<SelectLanguageDialog> {
           onPressed: () {
             Navigator.of(context).pop(selectedLanguage);
           },
-          child: Text('Сохранить'),
+          child: Text(appLocalizations.translate('save')),
         ),
         FlatButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pop(
+                _supportedLocale.indexOf(appLocalizations.locale.languageCode));
           },
-          child: Text('Отмена'),
+          child: Text(appLocalizations.translate('cancel')),
         ),
       ],
     );

@@ -1,3 +1,5 @@
+import 'package:boiler/services/db_sqlite.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class DeleteDialog extends StatefulWidget {
@@ -14,8 +16,11 @@ class DeleteDialog extends StatefulWidget {
 }
 
 class _DeleteDialogState extends State<DeleteDialog> {
+  AppLocalizations appLocalizations;
+
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
     return AlertDialog(
       title: Text(setTitle()),
       content: Text(setContent()),
@@ -31,7 +36,7 @@ class _DeleteDialogState extends State<DeleteDialog> {
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: Text('Отмена'),
+          child: Text(appLocalizations.translate('cancel')),
         ),
       ],
     );
@@ -39,31 +44,31 @@ class _DeleteDialogState extends State<DeleteDialog> {
 
   String setTitle() {
     if (widget.type == 0) {
-      return 'Удалить';
+      return appLocalizations.translate('delete');
     } else if (widget.type == 1) {
-      return 'Архивировать';
+      return appLocalizations.translate('archive_task');
     } else {
-      return 'Разархивировать';
+      return appLocalizations.translate('unarchive_task');
     }
   }
 
   String setContent() {
     if (widget.type == 0) {
-      return 'Вы уверены что хоте удалить задачу №${widget.id}';
+      return '${appLocalizations.translate('ask_delete_task')} ${widget.id}';
     } else if (widget.type == 1) {
-      return 'Вы уверены что хоте архивировать задачу №${widget.id}';
+      return '${appLocalizations.translate('ask_archive_task')} ${widget.id}';
     } else {
-      return 'Вы уверены что хоте разархивировать задачу №${widget.id}';
+      return '${appLocalizations.translate('ask_unarchive_task')} ${widget.id}';
     }
   }
 
   void onPress() {
-    // if (widget.type == 0) {
-    //   SQLiteDBProvider.db.deleteTask(widget.id);
-    // } else if (widget.type == 1) {
-    //   SQLiteDBProvider.db.archiveTask(widget.id);
-    // } else {
-    //   SQLiteDBProvider.db.unarchive(widget.id);
-    // }
+    if (widget.type == 0) {
+      SQLiteDBProvider.db.deleteTask(widget.id);
+    } else if (widget.type == 1) {
+      SQLiteDBProvider.db.archiveTask(widget.id);
+    } else {
+      SQLiteDBProvider.db.unarchive(widget.id);
+    }
   }
 }

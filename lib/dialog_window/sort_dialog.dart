@@ -1,28 +1,33 @@
 import 'package:boiler/models/sotr_items.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../global.dart';
 
 class SortDialog extends StatefulWidget {
+  final AppLocalizations local;
+
+  SortDialog({this.local});
+
   @override
   _SortDialogState createState() => _SortDialogState();
 }
 
 class _SortDialogState extends State<SortDialog> {
   List<SortItems> sortItems = List<SortItems>();
-  SortItems sortItem = SortItems();
   int sortType = config.sortTypeId;
 
   @override
   void initState() {
     super.initState();
-    sortItems = sortItem.getSortItems();
+    sortItems = SortItems.getSortItems(widget.local);
   }
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context);
     return AlertDialog(
-      title: Text('Выберите сортировку по умочанию'),
+      title: Text(appLocalizations.translate('select_default_sort')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -113,13 +118,13 @@ class _SortDialogState extends State<SortDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Сохранить'),
+          child: Text(appLocalizations.translate('save')),
         ),
         FlatButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Отмена'),
+          child: Text(appLocalizations.translate('cancel')),
         ),
       ],
     );

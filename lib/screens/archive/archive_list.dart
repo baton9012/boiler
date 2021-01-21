@@ -52,7 +52,7 @@ class _ArchiveListState extends State<ArchiveList> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     TaskTitleModel item = snapshot.data[index];
-                    return item.status == 2
+                    return item.status == 3
                         ? Dismissible(
                             confirmDismiss: (direction) {
                               if (direction == DismissDirection.startToEnd) {

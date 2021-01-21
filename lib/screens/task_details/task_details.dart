@@ -5,6 +5,7 @@ import 'package:boiler/screens/task_details/widgets/progress_bar.dart';
 import 'package:boiler/screens/task_details/widgets/text_detail.dart';
 import 'package:boiler/services/db_firebase.dart';
 import 'package:boiler/services/db_sqlite.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../global.dart';
@@ -25,20 +26,24 @@ class _TaskDetailState extends State<TaskDetail> {
   IconData statusIcon;
   bool isNeedStatusButton = true;
   AppBar appBar;
-  TextEditingController textEditingController = TextEditingController();
+  TextEditingController _descriptionMasterTextController =
+      TextEditingController();
   TaskModel task;
   bool isChangeStatus = false;
   FirebaseModel fireBaseModel;
   String statusLabel;
+  AppLocalizations appLocalizations;
 
   @override
   void initState() {
     super.initState();
-    statusLabel = statusToString(widget.taskTitle.status);
   }
 
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
+    print(appLocalizations.locale);
+    statusLabel = statusToString(widget.taskTitle.status);
     createAppBar(context);
     return Scaffold(
       appBar: appBar,
@@ -61,6 +66,8 @@ class _TaskDetailState extends State<TaskDetail> {
                     } else if (snapshot.hasData) {
                       task = snapshot.data;
                       task.id = widget.taskTitle.id;
+                      _descriptionMasterTextController.text =
+                          task.descriptionMaster;
                       return Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +78,8 @@ class _TaskDetailState extends State<TaskDetail> {
                             children: [
                               Expanded(
                                 child: TextDetail(
-                                  title: 'Тип работы: ',
+                                  title:
+                                      '${appLocalizations.translate('work_type')}: ',
                                   data: widget.taskTitle.type,
                                 ),
                               ),
@@ -85,11 +93,13 @@ class _TaskDetailState extends State<TaskDetail> {
                             ],
                           ),
                           TextDetail(
-                            title: 'Заказчик: ',
+                            title:
+                                '${appLocalizations.translate('customer')}: ',
                             data: widget.taskTitle.nlp,
                           ),
                           TextDetail(
-                            title: 'Адрес заказчика: ',
+                            title:
+                                '${appLocalizations.translate('customer_address')}: ',
                             data: task.city,
                           ),
                           TextDetail(
@@ -97,7 +107,7 @@ class _TaskDetailState extends State<TaskDetail> {
                             data: task.address,
                           ),
                           TextDetail(
-                            title: 'Примечание: ',
+                            title: '${appLocalizations.translate('note')}: ',
                             data: '',
                           ),
                           TextDetail(
@@ -108,7 +118,8 @@ class _TaskDetailState extends State<TaskDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextDetail(
-                                title: 'Статус: ',
+                                title:
+                                    '${appLocalizations.translate('status')}: ',
                                 data: statusLabel,
                               ),
                               Icon(
@@ -140,16 +151,21 @@ class _TaskDetailState extends State<TaskDetail> {
                           ),
                           SizedBox(height: 8.0),
                           TextDetail(
-                            title: 'Тип бойлера: ',
+                            title:
+                                '${appLocalizations.translate('boiler_type')}: ',
                             data: task.boilerType,
                           ),
                           TextField(
-                            controller: textEditingController,
+                            controller: _descriptionMasterTextController,
                             textInputAction: TextInputAction.send,
                             decoration: InputDecoration(
-                              labelText: 'Описание сделанных работ',
+                              labelText: appLocalizations
+                                  .translate('description_job_done'),
                               labelStyle: standardTextStyle,
                             ),
+                            onEditingComplete: () {
+                              updateMasterDescription();
+                            },
                           ),
                         ],
                       );
@@ -194,6 +210,7 @@ class _TaskDetailState extends State<TaskDetail> {
     FirebaseDBProvider.firebaseDB.updateFirebaseRecord(
       taskModel: task,
       taskTitleModel: widget.taskTitle,
+      isUpdateStatus: true,
     );
     setState(() {
       isChangeStatus = true;
@@ -209,7 +226,7 @@ class _TaskDetailState extends State<TaskDetail> {
           Navigator.of(context).pop(isChangeStatus);
         },
       ),
-      title: Text('Детали задачи'),
+      title: Text(appLocalizations.translate('task_detail')),
     );
     return appBar;
   }
@@ -221,21 +238,34 @@ class _TaskDetailState extends State<TaskDetail> {
         buttonColor = Colors.yellow.shade800;
         statusIcon = Icons.assignment_ind;
         buttonTitle = Icons.work;
-        return 'Присвоено ';
+        return appLocalizations.translate('attached') + ' ';
       case 1:
         statusIconColor = Colors.yellow.shade800;
         buttonColor = Colors.green;
         statusIcon = Icons.work;
         buttonTitle = Icons.done_all;
-        return 'В работе ';
+        return appLocalizations.translate('in_work') + ' ';
       case 2:
         setState(() {
           statusIconColor = Colors.green;
           statusIcon = Icons.done_all;
           isNeedStatusButton = false;
         });
-        return 'Законченно ';
+        return appLocalizations.translate('done') + ' ';
     }
     return '';
+  }
+
+  void updateMasterDescription() {
+    setState(() {
+      SQLiteDBProvider.db.updateMasterDescription(
+        id: widget.taskTitle.id,
+        description: _descriptionMasterTextController.text,
+      );
+    });
+    FirebaseDBProvider.firebaseDB.updateFirebaseRecord(
+      taskModel: task,
+      taskTitleModel: widget.taskTitle,
+    );
   }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:boiler/models/config.dart';
 import 'package:boiler/models/task.dart';
 import 'package:boiler/models/task_title.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
@@ -151,6 +150,14 @@ class SQLiteDBProvider {
     return res;
   }
 
+  Future<int> updateMasterDescription({String id, String description}) async {
+    final db = await database;
+    var res = await db.rawUpdate('UPDATE order_detail '
+        'SET description_master = $description '
+        'WHERE id_order = \'$id\';');
+    return res;
+  }
+
   Future<int> updateStatus({
     int status,
     DateTime date,
@@ -166,7 +173,7 @@ class SQLiteDBProvider {
     return res;
   }
 
-  Future<int> archiveTask(DatabaseReference id) async {
+  Future<int> archiveTask(String id) async {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET is_archive = 1 '
@@ -174,14 +181,14 @@ class SQLiteDBProvider {
     return res;
   }
 
-  Future<int> deleteTask(DatabaseReference id) async {
+  Future<int> deleteTask(String id) async {
     final db = await database;
     var res = await db.rawDelete('DELETE FROM order_title WHERE id = \'$id\'; '
         'DELETE FROM order_detail WHERE id_order = \'$id\'');
     return res;
   }
 
-  Future<int> unarchive(DatabaseReference id) async {
+  Future<int> unarchive(String id) async {
     final db = await database;
     var res = await db.rawUpdate('UPDATE order_title '
         'SET is_archive = null '

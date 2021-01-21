@@ -10,6 +10,7 @@ import 'package:boiler/screens/tast_list/widgets/settings_button.dart';
 import 'package:boiler/screens/tast_list/widgets/sort_button.dart';
 import 'package:boiler/services/auth.dart';
 import 'package:boiler/services/db_sqlite.dart';
+import 'package:boiler/widgets/app_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../global.dart';
@@ -28,24 +29,18 @@ class _TaskListState extends State<TaskList> {
   bool isSearchByNLP = true;
   Future<List<TaskTitleModel>> fTaskTitle;
   bool isNeedUpdate = false;
+  AppLocalizations appLocalizations;
 
   @override
   void initState() {
     super.initState();
     fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(searchText: '');
     getConfig();
-    appBarTitle = GestureDetector(
-      child: Text('Список задач'),
-      onLongPress: () {
-        Auth().signOut();
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    appLocalizations = AppLocalizations.of(context);
     return InheritedTaskList(
       updateTaskList: updateTaskList,
       child: Scaffold(
@@ -53,7 +48,18 @@ class _TaskListState extends State<TaskList> {
           toolbarHeight: isSearch ? 100.0 : 60.0,
           title: Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: appBarTitle,
+            child: appBarTitle == null
+                ? GestureDetector(
+                    child: Text(appLocalizations.translate('task_list')),
+                    onLongPress: () {
+                      Auth().signOut();
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                    },
+                  )
+                : appBarTitle,
           ),
           bottom: isSearch
               ? PreferredSize(
@@ -73,6 +79,7 @@ class _TaskListState extends State<TaskList> {
               padding: const EdgeInsets.only(top: 8.0),
               child: SortButton(
                 callBack: sort,
+                local: appLocalizations,
               ),
             ),
             Padding(
@@ -99,7 +106,8 @@ class _TaskListState extends State<TaskList> {
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
                       TaskTitleModel item = snapshot.data[index];
-                      return item.status == 2
+                      print('status ${item.status}');
+                      return item.status == 3
                           ? Dismissible(
                               confirmDismiss: (direction) {
                                 if (direction == DismissDirection.startToEnd) {
@@ -203,7 +211,7 @@ class _TaskListState extends State<TaskList> {
         textEditingController.text = '';
         fTaskTitle = SQLiteDBProvider.db.getAllTaskTitle(searchText: '');
         appBarTitle = GestureDetector(
-          child: Text('Список задач'),
+          child: Text(appLocalizations.translate('task_list')),
           onLongPress: () {
             Auth().signOut();
             Navigator.pushReplacement(context,
